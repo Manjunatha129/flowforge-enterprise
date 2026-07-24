@@ -9,6 +9,8 @@
 [![Build Status](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue)](https://github.com/features/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+FlowForge is a production-ready enterprise project management and team collaboration platform built with Spring Boot, React, JWT Authentication, WebSockets, MySQL, Docker, and CI/CD. It enables project planning, Kanban task management, real-time collaboration, reporting, and role-based administration.
+
 **FlowForge** is a production-grade, full-stack enterprise project management web application built with a high-performance **Java 21 Spring Boot 3** backend and a modern **React 18 + Vite** frontend styled with **Tailwind CSS**.
 
 Designed as both a commercial-ready SaaS platform and an educational reference architecture, FlowForge features clean architecture, Spring Security 6 stateless JWT authentication, Spring Boot STOMP WebSockets for real-time collaboration, SpringDoc OpenAPI 3.0 (Swagger UI), Spring Boot Actuator health monitoring, Docker containerization, Nginx reverse proxying, and GitHub Actions CI/CD automation.
