@@ -1,0 +1,4 @@
+com\flowforge\service\AuthServiceImplTest.class
+com\flowforge\service\TaskServiceImplTest.class
+com\flowforge\service\ProjectServiceImplTest.class
+com\flowforge\controller\AuthControllerTest.class

@@ -1,0 +1,19 @@
+{
+  "name": "TaskFlowe-monorepo",
+  "version": "1.0.0",
+  "description": "TaskFlowe Enterprise Full-Stack Project Management Application",
+  "scripts": {
+    "dev": "npm --prefix TaskFlowe-frontend run dev",
+    "build": "npm --prefix TaskFlowe-frontend run build",
+    "preview": "npm --prefix TaskFlowe-frontend run preview",
+    "start": "npm --prefix TaskFlowe-frontend run dev"
+  },
+  "keywords": [
+    "TaskFlowe",
+    "project-management",
+    "react",
+    "spring-boot"
+  ],
+  "author": "TaskFlowe Engineering Team",
+  "license": "MIT"
+}

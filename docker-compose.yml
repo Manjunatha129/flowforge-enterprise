@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  # -------------------------------------------------------------------
+  # MySQL 8.0 Relational Database Datastore
+  # -------------------------------------------------------------------
+  mysql-db:
+    image: mysql:8.0
+    container_name: flowforge-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-flowforge_db}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_USER: ${DB_USER:-flowforge}
+      MYSQL_PASSWORD: ${DB_USER_PASSWORD:-flowforge123}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - flowforge-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # -------------------------------------------------------------------
+  # Java 21 Spring Boot 3 REST API & STOMP WebSocket Server
+  # -------------------------------------------------------------------
+  backend:
+    build:
+      context: ./flowforge-backend
+      dockerfile: Dockerfile
+    container_name: flowforge-backend
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST: mysql-db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-flowforge_db}
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD:-root}
+      JWT_SECRET: ${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    networks:
+      - flowforge-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # -------------------------------------------------------------------
+  # React 18 + Vite Production Web Server (Nginx Reverse Proxy)
+  # -------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./flowforge-frontend
+      dockerfile: Dockerfile
+    container_name: flowforge-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - flowforge-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+# -------------------------------------------------------------------
+# Persistent Storage Volumes & Networks
+# -------------------------------------------------------------------
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  flowforge-network:
+    driver: bridge

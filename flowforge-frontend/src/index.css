@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-primary: #0a0f1d;
+    --color-bg-secondary: #152033;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #94a3b8;
+  }
+
+  html.dark {
+    --color-bg-primary: #0a0f1d;
+    --color-bg-secondary: #152033;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #94a3b8;
+    background-color: #0a0f1d;
+    color: #f8fafc;
+  }
+
+  html.light {
+    --color-bg-primary: #f8fafc;
+    --color-bg-secondary: #ffffff;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* ========================================================= */
+/* PREMIUM LIGHT THEME OVERRIDES (Clean White & High Contrast) */
+/* ========================================================= */
+
+html.light body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* 1. Containers, Cards, Header & Sidebar White Backgrounds */
+html.light header,
+html.light aside,
+html.light main,
+html.light .bg-slate-950,
+html.light .bg-slate-900,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-900\/95,
+html.light .bg-slate-900\/70,
+html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/90,
+html.light .bg-slate-950\/95 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* 2. Secondary Card Panels & Hover Items */
+html.light .bg-slate-800,
+html.light .bg-slate-800\/50,
+html.light .bg-slate-800\/60,
+html.light .bg-slate-800\/80 {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .hover\:bg-slate-800:hover,
+html.light .hover\:bg-slate-800\/50:hover,
+html.light .hover\:bg-slate-800\/60:hover {
+  background-color: #e2e8f0 !important;
+}
+
+/* 3. Typography & Text Contrast Adjustments */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6,
+html.light .text-slate-100,
+html.light .text-slate-200,
+html.light .text-slate-300 {
+  color: #0f172a !important;
+}
+
+html.light p,
+html.light span.text-slate-400,
+html.light div.text-slate-400,
+html.light .text-slate-400,
+html.light .text-slate-500 {
+  color: #475569 !important;
+}
+
+/* Preserve Gradient Headings */
+html.light .bg-clip-text {
+  color: transparent !important;
+}
+
+/* 4. Borders & Dividers */
+html.light .border-slate-800,
+html.light .border-slate-800\/80,
+html.light .border-slate-800\/60,
+html.light .border-slate-800\/40,
+html.light .border-slate-700,
+html.light .border-slate-700\/60 {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .divide-slate-800 > :not([hidden]) ~ :not([hidden]),
+html.light .divide-slate-800\/60 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #e2e8f0 !important;
+}
+
+/* 5. Inputs, Selects & Textareas */
+html.light input,
+html.light select,
+html.light textarea {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* 6. Colored Action Buttons & Badges (Preserve Contrast) */
+html.light button.bg-amber-500,
+html.light button.bg-brand-500,
+html.light button.bg-emerald-500,
+html.light button.bg-rose-500,
+html.light a.bg-amber-500,
+html.light a.bg-brand-500 {
+  color: #0f172a !important;
+}
+
+html.light button.bg-amber-500 .text-slate-950,
+html.light button.bg-brand-500 .text-white {
+  color: #ffffff !important;
+}
+
+/* 7. Chat Message Bubbles in Light Mode */
+html.light div.bg-slate-950.border-slate-800 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
