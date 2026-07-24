@@ -22,13 +22,11 @@ import java.util.Map;
  * delegates execution to AuthService, and returns standard HTTP responses.
  * 
  * ANNOTATIONS:
- * - @RestController: Combines @Controller and @ResponseBody so returned data is
- * serialized into JSON.
- * - @RequestMapping("/api/v1/auth"): Configures the base URI path for all
- * endpoints in this controller.
+ * - @RestController: Combines @Controller and @ResponseBody so returned data is automatically serialized into JSON responses.
+ * - @RequestMapping: Configures the base URI paths ("/api/auth" and "/api/v1/auth") for all endpoints in this controller.
  */
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping({"/api/auth", "/api/v1/auth"})
 public class AuthController {
 
     private final AuthService authService;

@@ -531,8 +531,10 @@ All responses follow the unified `ApiResponse<T>` JSON envelope format:
 
 ## 🔒 Security Authorization Summary
 - **Public Routes (`permitAll`)**: `/api/auth/**`, `/api/v1/auth/**`, `/h2-console/**`, `/v3/api-docs/**`, `/swagger-ui/**`, `/actuator/**`, `/ws/**`.
+- **Auth Endpoint Base URIs**: `@RequestMapping({"/api/auth", "/api/v1/auth"})` (e.g. `POST /api/auth/login` and `POST /api/v1/auth/login` both map to the login handler).
 - **Admin Only Routes (`hasRole('ADMIN')`)**: `/api/v1/admin/**`.
 - **Protected Routes (`authenticated`)**: All other REST endpoints require a valid JWT Bearer token passed in the `Authorization: Bearer <token>` HTTP header.
+
 
 
 
