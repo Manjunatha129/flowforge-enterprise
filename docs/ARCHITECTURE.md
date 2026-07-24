@@ -109,3 +109,13 @@ Incoming HTTP Request with Header: "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..
 1. **Entity Definition**: `User.java` inherits `id` (UUID), `createdAt`, and `updatedAt` from `BaseEntity.java`.
 2. **Pre-Persist Auditing**: `@PrePersist` automatically sets `createdAt` and `updatedAt` timestamps before Hibernate issues SQL `INSERT`.
 3. **Pre-Update Auditing**: `@PreUpdate` automatically updates `updatedAt` before Hibernate issues SQL `UPDATE`.
+
+---
+
+## 🔐 5. Security Filter Chain Configuration (`WebSecurityConfig.java`)
+
+- **CSRF**: Disabled (`AbstractHttpConfigurer::disable`) for RESTful API execution with JWTs.
+- **Permitted Public Routes**: `/api/auth/**`, `/api/v1/auth/**`, `/h2-console/**`, `/v3/api-docs/**`, `/swagger-ui/**`, `/actuator/**`, `/ws/**`.
+- **Role-Based Access**: `/api/v1/admin/**` requires `ROLE_ADMIN`.
+- **Authenticated Routes**: All other incoming HTTP requests require a valid JWT Bearer token evaluated by `JwtAuthenticationFilter`.
+

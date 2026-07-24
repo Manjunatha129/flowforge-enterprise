@@ -525,4 +525,14 @@ This journal documents the step-by-step development process of **FlowForge** (Fu
   - **Team Chat Messages**: Workspace general channel messages, 4 project channels, and direct message threads (`Rahul -> Manju`, `Priya -> Akash`).
   - **System Notifications, Activity Log, Comments, and File Attachments**: Populated realistic activity timeline events, task comments, system alerts, and PDF/PNG/XLSX file attachments stored in database tables.
 
+---
+
+## 📅 Module 12B: Spring Security Public Auth Filter Chain Update
+
+### What We Built / Updated
+- **Spring Security Filter Chain (`WebSecurityConfig.java`)**: Updated `SecurityFilterChain` bean to explicitly permit all authentication endpoints under `/api/auth/**` and `/api/v1/auth/**` without requiring authentication.
+- **CSRF & Session Policy**: Confirmed CSRF protection is disabled for REST endpoints (`csrf(AbstractHttpConfigurer::disable)`) and session policy is configured as `STATELESS` for JWT Bearer token authentication.
+- **Request Authorization**: Enforced `.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")` for admin routes and `.anyRequest().authenticated()` for all other REST resources.
+
+
 

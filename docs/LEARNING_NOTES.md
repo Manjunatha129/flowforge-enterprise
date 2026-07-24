@@ -86,6 +86,16 @@ Welcome to the **FlowForge Learning Guide**! This document explains core Spring 
 - **What it is**: Converting Axios binary array buffer responses (`responseType: 'blob'`) into temporary browser memory URLs.
 - **Why it exists**: Enables client-side JavaScript to automatically trigger file downloads for PDF, Excel, and CSV streams without navigating away from the page.
 
+---
+
+## 🔒 Spring Security Concepts
+
+### 1. `SecurityFilterChain` & `requestMatchers`
+- **What it is**: Spring Security's request processing pipeline where incoming HTTP requests pass through security filters (CORS, CSRF, JWT validation).
+- **`permitAll()`**: Instructs Spring Security to bypass authentication checks for public endpoints (such as `/api/auth/**` and `/api/v1/auth/**`).
+- **`anyRequest().authenticated()`**: Enforces authentication on all unspecified routes, requiring a valid JWT Bearer token.
+
+
 
 
 
