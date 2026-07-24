@@ -1,0 +1,27 @@
+# Java / Maven
+**/target/
+*.class
+*.log
+
+# Node / React
+**/node_modules/
+**/dist/
+
+# Environment files
+**/.env
+.env
+.env.local
+.env.production
+
+# Keep example env files
+!.env.example
+!**/.env.example
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
