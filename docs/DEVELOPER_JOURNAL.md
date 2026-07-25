@@ -534,5 +534,15 @@ This journal documents the step-by-step development process of **FlowForge** (Fu
 - **CSRF & Session Policy**: Confirmed CSRF protection is disabled for REST endpoints (`csrf(AbstractHttpConfigurer::disable)`) and session policy is configured as `STATELESS` for JWT Bearer token authentication.
 - **Request Authorization**: Enforced `.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")` for admin routes and `.anyRequest().authenticated()` for all other REST resources.
 
+---
+
+## 📅 Module 12C: Flexible Email / Username Auth & Admin Seeding
+
+### What We Built / Updated
+- **Admin Account Seeding (`DemoDataSeeder.java` & `AuthServiceImpl.java`)**: Added `admin` account with email `admin@flowforge.com` and password `admin123` with `ROLE_ADMIN` role.
+- **Flexible Auth Lookup (`UserRepository.java` & `UserDetailsServiceImpl.java`)**: Added `findByEmailOrName` method so users can authenticate using either their email address (`admin@flowforge.com`) or display username (`admin`).
+- **Build Verification**: Clean compilation (`BUILD SUCCESS`).
+
+
 
 

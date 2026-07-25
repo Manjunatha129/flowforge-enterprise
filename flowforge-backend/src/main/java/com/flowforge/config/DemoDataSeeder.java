@@ -69,6 +69,19 @@ public class DemoDataSeeder implements CommandLineRunner {
         }
 
         // --- 1. CREATE DEMO USERS ---
+        User adminUser = User.builder()
+                .name("admin")
+                .email("admin@flowforge.com")
+                .password(passwordEncoder.encode("admin123"))
+                .role(Role.ROLE_ADMIN)
+                .enabled(true)
+                .designation("System Administrator")
+                .department("IT Infrastructure")
+                .location("Global")
+                .bio("Master System Administrator for FlowForge Platform.")
+                .lastLoginAt(LocalDateTime.now())
+                .build();
+
         User manju = User.builder()
                 .name("Manju")
                 .email("manju@flowforge.com")
@@ -134,7 +147,7 @@ public class DemoDataSeeder implements CommandLineRunner {
                 .lastLoginAt(LocalDateTime.now().minusHours(4))
                 .build();
 
-        userRepository.saveAll(Arrays.asList(manju, rahul, priya, teju, akash));
+        userRepository.saveAll(Arrays.asList(adminUser, manju, rahul, priya, teju, akash));
 
         // --- 2. CREATE PROJECTS ---
         Project smsProject = Project.builder()

@@ -163,9 +163,9 @@ public class AuthServiceImpl implements AuthService {
         }
 
         @Override
-        public UserDto getCurrentUser(String email) {
-                User user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+        public UserDto getCurrentUser(String emailOrName) {
+                User user = userRepository.findByEmailOrName(emailOrName, emailOrName)
+                                .orElseThrow(() -> new ResourceNotFoundException("User", "email or username", emailOrName));
                 return mapToUserDto(user);
         }
 
@@ -182,14 +182,19 @@ public class AuthServiceImpl implements AuthService {
         private void initDefaultAdmin() {
                 if (userRepository.count() == 0) {
                         User admin = User.builder()
-                                        .name("System Admin")
-                                        .email("admin@FlowForge.com")
-                                        .password(passwordEncoder.encode("AdminPassword123!"))
+                                        .name("admin")
+                                        .email("admin@flowforge.com")
+                                        .password(passwordEncoder.encode("admin123"))
                                         .role(Role.ROLE_ADMIN)
                                         .enabled(true)
+                                        .designation("System Administrator")
+                                        .department("IT Infrastructure")
+                                        .location("Global")
+                                        .bio("Master System Administrator account for FlowForge enterprise.")
                                         .lastLoginAt(LocalDateTime.now())
                                         .build();
                         userRepository.save(admin);
                 }
         }
 }
+
