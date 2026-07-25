@@ -23,10 +23,10 @@ import java.util.Map;
  * 
  * ANNOTATIONS:
  * - @RestController: Combines @Controller and @ResponseBody so returned data is automatically serialized into JSON responses.
- * - @RequestMapping: Configures the base URI paths ("/api/auth" and "/api/v1/auth") for all endpoints in this controller.
+ * - @RequestMapping: Configures the base URI paths ("/api/auth", "/api/v1/auth", and "/auth") for all endpoints in this controller.
  */
 @RestController
-@RequestMapping({"/api/auth", "/api/v1/auth"})
+@RequestMapping({"/api/auth", "/api/v1/auth", "/auth"})
 public class AuthController {
 
     private final AuthService authService;

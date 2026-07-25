@@ -573,6 +573,21 @@ This journal documents the step-by-step development process of **FlowForge** (Fu
   - Live registration against Render (`https://flowforge-enterprise.onrender.com/api/v1/auth/register`) succeeded (`HTTP 201 Created`, JWT token generated).
   - Duplicate registration returned clean `HTTP 409 Conflict`.
 
+---
+
+## 📅 Module 12G: "No Static Resource auth/register" Root Cause & Base URL Sanitization
+
+### Root Cause Analysis
+- **Error Symptom**: `An unexpected error occurred: No static resource auth/register.`
+- **Cause**: Occurred when incoming HTTP requests hit `https://flowforge-enterprise.onrender.com/auth/register` (lacking the `/api` or `/api/v1` path prefix because host environment variables passed base domain root without API path). Spring Boot tried to resolve `/auth/register` as static content and threw `No static resource auth/register.`
+- **Fixes Applied**:
+  1. **`api.js`**: Implemented `getSanitizedBaseUrl()` helper function to sanitize `API_BASE_URL` and guarantee that `/api/v1` is automatically appended to the base URL even if Vercel host environment variables omit it.
+  2. **`AuthController.java`**: Expanded `@RequestMapping` annotation to `@RequestMapping({"/api/auth", "/api/v1/auth", "/auth"})` so requests to `/auth/register`, `/api/auth/register`, and `/api/v1/auth/register` all map cleanly to controller methods.
+- **Verification Results**:
+  - Live test of `POST /auth/register` now maps to `AuthController` and returns clean responses.
+  - Frontend production build completed cleanly in 6.89s.
+
+
 
 
 

@@ -1,8 +1,20 @@
 import axios from 'axios';
 import { API_BASE_URL, STORAGE_KEYS } from '../utils/constants';
 
+// Clean and normalize API Base URL to ensure /api/v1 prefix is always attached
+const getSanitizedBaseUrl = () => {
+  let url = (API_BASE_URL || 'https://flowforge-enterprise.onrender.com/api/v1').trim();
+  if (url.endsWith('/')) {
+    url = url.slice(0, -1);
+  }
+  if (!url.includes('/api')) {
+    url = `${url}/api/v1`;
+  }
+  return url;
+};
+
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getSanitizedBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
