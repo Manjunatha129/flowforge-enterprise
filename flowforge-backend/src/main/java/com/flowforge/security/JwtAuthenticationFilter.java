@@ -31,6 +31,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Bypasses filter execution for HTTP OPTIONS preflight requests, public auth endpoints, and actuator health checks.
+     * 
+     * @param request Incoming HttpServletRequest
+     * @return true to skip filter execution for public endpoints; false otherwise.
+     */
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
+        String path = request.getServletPath();
+        if (path == null || path.isEmpty()) {
+            path = request.getRequestURI();
+        }
+        return path != null && (path.contains("/auth/") || path.contains("/actuator/"));
+    }
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,

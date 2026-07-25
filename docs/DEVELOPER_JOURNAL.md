@@ -554,6 +554,16 @@ This journal documents the step-by-step development process of **FlowForge** (Fu
   - Live registration against Render (`https://flowforge-enterprise.onrender.com/api/v1/auth/register`) succeeded (`HTTP 201 Created`, JWT token generated).
   - Frontend production bundle built cleanly in 8.68s.
 
+---
+
+## 📅 Module 12E: Spring Security Filter Bypass & OPTIONS Preflight Whitelisting
+
+### What Was Updated
+- **`WebSecurityConfig.java`**: Added explicit `requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()` and explicit string patterns (`/api/auth/**`, `/api/auth/register`, `/api/auth/login`, `/api/v1/auth/**`, `/api/v1/auth/register`, `/api/v1/auth/login`, `/auth/**`, `/actuator/**`, `/actuator/health`).
+- **`JwtAuthenticationFilter.java`**: Added `shouldNotFilter` override returning `true` for all `OPTIONS` requests and paths containing `/auth/` or `/actuator/`, ensuring public auth requests bypass token verification.
+- **Verification**: Clean build compilation (`BUILD SUCCESS`).
+
+
 
 
 

@@ -145,10 +145,26 @@ public class WebSecurityConfig {
                 
                 // Configure HTTP URL authorization rules
                 .authorizeHttpRequests(auth -> auth
-                        // Public authentication endpoints (/api/auth/** and /api/v1/auth/**)
-                        .requestMatchers("/api/auth/**", "/api/v1/auth/**", "/h2-console/**", "/v3/api-docs/**", "/swagger-ui/**",
-                                "/swagger-ui.html", "/actuator/**", "/ws/**")
-                        .permitAll()
+                        // Permit all HTTP OPTIONS preflight requests unconditionally
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        
+                        // Public authentication endpoints (/api/auth/**, /api/v1/auth/**, /auth/**, actuator, docs, ws)
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/v1/auth/**",
+                                "/api/v1/auth/register",
+                                "/api/v1/auth/login",
+                                "/auth/**",
+                                "/actuator/**",
+                                "/actuator/health",
+                                "/h2-console/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/ws/**"
+                        ).permitAll()
                         
                         // Admin role endpoints restriction
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
