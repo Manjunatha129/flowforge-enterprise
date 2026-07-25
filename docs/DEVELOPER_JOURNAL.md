@@ -543,6 +543,18 @@ This journal documents the step-by-step development process of **FlowForge** (Fu
 - **Flexible Auth Lookup (`UserRepository.java` & `UserDetailsServiceImpl.java`)**: Added `findByEmailOrName` method so users can authenticate using either their email address (`admin@flowforge.com`) or display username (`admin`).
 - **Build Verification**: Clean compilation (`BUILD SUCCESS`).
 
+---
+
+## 📅 Module 12D: Axios Timeout Extension & Registration DTO Contract Audit
+
+### What Was Audited & Fixed
+- **Axios Timeout Extension (`api.js`)**: Increased default timeout from `10000ms` (10s) to `30000ms` (30s) to accommodate Render cold-start latency and Railway database initial connection setup on cloud deployments.
+- **Registration Payload Contract (`RegisterRequest.java` & `authService.js`)**: Confirmed backend expects `{ "name": "...", "email": "...", "password": "..." }` with `@NotBlank`, `@Email`, and `@Size(min = 8)`. Updated `authService.js` to ensure whitespace trimming.
+- **Verification Results**:
+  - Live registration against Render (`https://flowforge-enterprise.onrender.com/api/v1/auth/register`) succeeded (`HTTP 201 Created`, JWT token generated).
+  - Frontend production bundle built cleanly in 8.68s.
+
+
 
 
 
