@@ -563,6 +563,17 @@ This journal documents the step-by-step development process of **FlowForge** (Fu
 - **`JwtAuthenticationFilter.java`**: Added `shouldNotFilter` override returning `true` for all `OPTIONS` requests and paths containing `/auth/` or `/actuator/`, ensuring public auth requests bypass token verification.
 - **Verification**: Clean build compilation (`BUILD SUCCESS`).
 
+---
+
+## 📅 Module 12F: Global Exception Handler Enhancements & 500 Prevention
+
+### What Was Updated
+- **`GlobalExceptionHandler.java`**: Added explicit `@ExceptionHandler` methods for `HttpMessageNotReadableException` (returns HTTP 400 Bad Request on malformed JSON body) and `DataIntegrityViolationException` (returns HTTP 409 Conflict on database constraint violations), eliminating unhandled HTTP 500 error fallthroughs.
+- **Live Testing Verification**:
+  - Live registration against Render (`https://flowforge-enterprise.onrender.com/api/v1/auth/register`) succeeded (`HTTP 201 Created`, JWT token generated).
+  - Duplicate registration returned clean `HTTP 409 Conflict`.
+
+
 
 
 
