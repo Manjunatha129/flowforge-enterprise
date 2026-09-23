@@ -94,8 +94,8 @@ Welcome to the **FlowForge Learning Guide**! This document explains core Spring 
 - **What it is**: Spring Security's request processing pipeline where incoming HTTP requests pass through security filters (CORS, CSRF, JWT validation).
 - **`permitAll()`**: Instructs Spring Security to bypass authentication checks for public endpoints (such as `/api/auth/**` and `/api/v1/auth/**`).
 - **`anyRequest().authenticated()`**: Enforces authentication on all unspecified routes, requiring a valid JWT Bearer token.
+### 2. Spring Boot Initialization & `CommandLineRunner` Execution Order
+- **What it is**: Spring Boot bean lifecycle instantiates `@Service` beans first, triggering constructor logic before `@Component` `CommandLineRunner` runner classes execute.
+- **Why it matters**: Attempting to insert default records in `@Service` constructors without idempotency checks (`findByEmail`) can cause database unique constraint violations when `CommandLineRunner` seeders run.
 
-
-
-
-
+---

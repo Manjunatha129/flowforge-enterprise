@@ -3,7 +3,7 @@ import { API_BASE_URL, STORAGE_KEYS } from '../utils/constants';
 
 // Clean and normalize API Base URL to ensure /api/v1 prefix is always attached
 const getSanitizedBaseUrl = () => {
-  let url = (API_BASE_URL || 'https://flowforge-enterprise.onrender.com/api/v1').trim();
+  let url = (API_BASE_URL || 'http://127.0.0.1:8080/api/v1').trim();
   if (url.endsWith('/')) {
     url = url.slice(0, -1);
   }

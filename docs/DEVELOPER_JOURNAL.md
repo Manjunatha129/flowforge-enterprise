@@ -587,10 +587,62 @@ This journal documents the step-by-step development process of **FlowForge** (Fu
   - Live test of `POST /auth/register` now maps to `AuthController` and returns clean responses.
   - Frontend production build completed cleanly in 6.89s.
 
+---
 
+## 📅 Module 13: Full-Stack Project Testing, Root Package Script Fix & Demo Data Seeder Resolution
 
+### What Was Tested & Audited
+1. **Backend Automated JUnit 5 Test Suite Execution**:
+   - Executed `mvnw.cmd test` across all controllers, services, and security components.
+   - Result: 8 tests executed, 0 failures, 0 errors (`BUILD SUCCESS` in 10.57s).
+2. **Frontend Production Build Verification**:
+   - Executed `npm run build` using Vite 5.4.
+   - Result: 1765 modules transformed, production SPA bundle compiled into `dist/` cleanly in 36.75s.
+3. **Monorepo Root Package Script Alignment**:
+   - Identified misconfiguration in root `package.json` where npm scripts pointed to `TaskFlowe-frontend` instead of `flowforge-frontend`.
+   - Updated root `package.json` scripts (`dev`, `build`, `preview`, `start`) to reference `flowforge-frontend`.
+4. **Data Initialization Unique Constraint Violation Fix**:
+   - **Issue**: During Spring Boot startup (`mvnw.cmd spring-boot:run`), `DemoDataSeeder` threw `JdbcSQLIntegrityConstraintViolationException` due to duplicate insertion of `admin@flowforge.com`.
+   - **Root Cause**: `AuthServiceImpl`'s `@Service` constructor initialized the default admin user `admin@flowforge.com`. `DemoDataSeeder` only checked for `manju@flowforge.com`, then attempted to save a hardcoded `adminUser` instance again.
+   - **Fix Applied**: Updated `DemoDataSeeder.java` to fetch `userRepository.findByEmail("admin@flowforge.com")` or create if missing, avoiding duplicate database insertion.
+5. **Runtime Server Verification**:
+   - Backend Spring Boot application launched on `http://localhost:8080` (H2 Console active at `/h2-console`).
+   - Frontend Vite development server launched on `http://localhost:5174`.
+6. **Production Database Connection & Diagnostic Audit**:
+   - **Root Cause Identified**: The 30,000 ms timeout ("timeout of 30000ms exceeded") on Vercel frontend login was caused by the expiration of the external Railway MySQL database. Render backend was attempting to open a JDBC connection to the unreachable Railway MySQL host, causing Spring Security and HikariCP connection pool to block HTTP requests until timing out.
+   - **Properties Enhancement**: Updated `application-prod.properties` to support full `DB_URL` and `DB_DRIVER` environment variables directly (in addition to `DB_HOST`/`DB_PORT`/`DB_NAME`), added explicit `connectTimeout=10000` and `socketTimeout=10000` flags, and reduced HikariCP connection timeout to 10s to ensure immediate, diagnostic failure rather than hanging client requests.
+   - **Diagnostic Component**: Added `DatabaseDiagnosticsRunner.java` (`CommandLineRunner`) to safely log database connection metadata (sanitizing raw passwords and credentials) on Spring Boot application startup.
+   - **Verification**: Compiled backend cleanly (`mvnw.cmd test-compile`), executed unit test suite (8/8 tests passing), built frontend bundle (`npm run build`), and verified local execution.
 
+---
 
+## 📅 Module 14: Comprehensive Local Application Verification, RBAC Validation & Deployment Readiness Audit
 
-
-
+### What Was Inspected & Tested
+1. **Repository & Config Inspection**:
+   - Inspected `pom.xml`, `Dockerfile`, `application.properties`, `application-dev.properties`, `application-prod.properties`.
+   - Inspected controllers, services, entities (`User`, `Role`, `Project`, `Task`, etc.), security configuration (`WebSecurityConfig.java`), JWT filter (`JwtAuthenticationFilter.java`), exception handling (`GlobalExceptionHandler.java`), and CORS mappings.
+   - Inspected frontend `package.json`, `vite.config.js`, `src/services/api.js`, `src/utils/constants.js`, and environment files.
+2. **Local Backend Execution**:
+   - Launched Spring Boot backend with development profile using H2 database (`jdbc:h2:mem:flowforge_dev_db`).
+   - Verified Spring Boot startup, Actuator health check (`/actuator/health`), H2 Console availability (`/h2-console`), and database table auto-creation.
+3. **Local Frontend Execution**:
+   - Launched Vite development server on `http://localhost:5173`.
+   - Verified frontend routing, login page, and registration page loads.
+4. **End-to-End Workflow & Security Testing**:
+   - Tested User Registration (`POST /api/v1/auth/register`), BCrypt password hashing, and DB persistence.
+   - Tested User Login (`POST /api/v1/auth/login`) and retrieved JWT Bearer token.
+   - Tested Admin Login (`POST /api/v1/auth/login` for `manju@flowforge.com` with `ROLE_ADMIN`).
+   - Verified JWT Bearer token authentication on protected endpoints (`/api/v1/projects`, `/api/v1/tasks`, `/api/v1/dashboard/stats`).
+   - Tested unauthenticated request rejection (`401 Unauthorized`).
+   - Tested Role-Based Access Control (RBAC): `ROLE_USER` denied access to admin endpoints (`/api/v1/admin/users`) with `401`/`403`, while `ROLE_ADMIN` successfully accessed user management.
+   - Tested Project creation (`POST /api/v1/projects`) and update (`PUT /api/v1/projects/{id}`).
+   - Tested Task creation (`POST /api/v1/tasks`) and completion (`PUT /api/v1/tasks/{id}`).
+   - Tested Dashboard metrics (`GET /api/v1/dashboard/stats`).
+5. **Error Handling**:
+   - Verified invalid login credentials (`401 Unauthorized`).
+   - Verified duplicate user registration (`409 Conflict`).
+   - Verified nonexistent resource access (`404 Not Found`).
+6. **Automated Test Suite & Build Verification**:
+   - Executed `.\mvnw.cmd clean test` in `flowforge-backend`: 8 tests run, 0 failures, 0 errors (`BUILD SUCCESS`).
+   - Executed `npm run build` in `flowforge-frontend`: Production SPA bundle built into `dist/` cleanly with 0 errors.

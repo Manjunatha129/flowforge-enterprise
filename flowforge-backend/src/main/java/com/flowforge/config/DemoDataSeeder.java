@@ -58,29 +58,28 @@ public class DemoDataSeeder implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * Executes demo data seeding logic after Spring application context initializes.
-     * Checks if demo users exist to prevent duplicate data insertion.
-     */
     @Override
     public void run(String... args) throws Exception {
+        // Check if demo user manju@flowforge.com already exists to prevent duplicate seeding
         if (userRepository.findByEmail("manju@flowforge.com").isPresent()) {
             return; // Demo data already initialized
         }
 
         // --- 1. CREATE DEMO USERS ---
-        User adminUser = User.builder()
-                .name("admin")
-                .email("admin@flowforge.com")
-                .password(passwordEncoder.encode("admin123"))
-                .role(Role.ROLE_ADMIN)
-                .enabled(true)
-                .designation("System Administrator")
-                .department("IT Infrastructure")
-                .location("Global")
-                .bio("Master System Administrator for FlowForge Platform.")
-                .lastLoginAt(LocalDateTime.now())
-                .build();
+        // Fetch existing admin user created by AuthServiceImpl initDefaultAdmin() or build a new one
+        User adminUser = userRepository.findByEmail("admin@flowforge.com")
+                .orElseGet(() -> User.builder()
+                        .name("admin")
+                        .email("admin@flowforge.com")
+                        .password(passwordEncoder.encode("admin123"))
+                        .role(Role.ROLE_ADMIN)
+                        .enabled(true)
+                        .designation("System Administrator")
+                        .department("IT Infrastructure")
+                        .location("Global")
+                        .bio("Master System Administrator for FlowForge Platform.")
+                        .lastLoginAt(LocalDateTime.now())
+                        .build());
 
         User manju = User.builder()
                 .name("Manju")
