@@ -31,6 +31,8 @@ public class FlowForgeApplication {
      */
     private static void normalizeDatabaseUrl() {
         String dbUrl = System.getenv("DB_URL");
+        String dbHost = System.getenv("DB_HOST");
+
         if (dbUrl != null && !dbUrl.isBlank()) {
             String trimmedUrl = dbUrl.trim();
             if (trimmedUrl.startsWith("mysql://")) {
@@ -42,7 +44,26 @@ public class FlowForgeApplication {
             log.info("Normalized JDBC Connection URL configured from DB_URL environment variable.");
             System.setProperty("spring.datasource.url", trimmedUrl);
             System.setProperty("spring.datasource.driver-class-name", "com.mysql.cj.jdbc.Driver");
+        } else if (dbHost != null && !dbHost.isBlank()) {
+            String user = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
+            String pass = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
+            String port = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
+            String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "flowforge_db";
+            
+            String constructedUrl = "jdbc:mysql://" + dbHost + ":" + port + "/" + dbName + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&connectTimeout=5000&socketTimeout=5000";
+            log.info("Constructed MySQL JDBC URL from DB_HOST environment variable.");
+            System.setProperty("spring.datasource.url", constructedUrl);
+            System.setProperty("spring.datasource.username", user);
+            System.setProperty("spring.datasource.password", pass);
+            System.setProperty("spring.datasource.driver-class-name", "com.mysql.cj.jdbc.Driver");
+        } else {
+            log.info("No external DB_URL/DB_HOST specified. Initializing resilient in-memory datastore fallback.");
+            System.setProperty("spring.datasource.url", "jdbc:h2:mem:flowforge_prod_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL");
+            System.setProperty("spring.datasource.username", "sa");
+            System.setProperty("spring.datasource.password", "");
+            System.setProperty("spring.datasource.driver-class-name", "org.h2.Driver");
         }
     }
+
 }
 
