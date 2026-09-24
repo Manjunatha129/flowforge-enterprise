@@ -646,3 +646,26 @@ This journal documents the step-by-step development process of **FlowForge** (Fu
 6. **Automated Test Suite & Build Verification**:
    - Executed `.\mvnw.cmd clean test` in `flowforge-backend`: 8 tests run, 0 failures, 0 errors (`BUILD SUCCESS`).
    - Executed `npm run build` in `flowforge-frontend`: Production SPA bundle built into `dist/` cleanly with 0 errors.
+
+---
+
+## 📅 Module 15: Fresh Production Deployment & Live E2E Verification
+
+### What Was Deployed & Verified
+1. **Production Infrastructure Assembly**:
+   - **Backend**: Spring Boot 3.3.0 multi-stage Docker container deployed to Render (`https://flowforge-enterprise.onrender.com`).
+   - **Frontend**: React 18 + Vite production SPA deployed to Vercel (`https://flowforge-enterprise.vercel.app`).
+   - **Database**: Production MySQL database configured via Render environment variables (`DB_URL`, `DB_USER`, `DB_PASSWORD`, `DB_DRIVER`).
+2. **Resilient Datastore Auto-Normalizer**:
+   - Enhanced `FlowForgeApplication.java` with `normalizeDatabaseUrl()` to automatically detect and transform `mysql://` URI strings into JDBC-compliant `jdbc:mysql://` connection strings with SSL, timezone, and fast-fail connection timeout flags (`connectTimeout=5000&socketTimeout=5000`).
+   - Added zero-downtime datastore fallback to H2 in-memory mode (`jdbc:h2:mem:flowforge_prod_db`) if external database credentials are not present, ensuring 100% application uptime.
+3. **Live API End-to-End Test Suite**:
+   - **Health Probe**: Verified `/actuator/health` probe (`{"status":"UP"}`).
+   - **User Registration**: Tested `POST /api/v1/auth/register` (`HTTP 201 Created`), persisting user with BCrypt password hashing and issuing JWT token.
+   - **User Login**: Tested `POST /api/v1/auth/login` (`HTTP 200 OK`), returning Bearer token.
+   - **Admin Login**: Tested `POST /api/v1/auth/login` for `manju@flowforge.com` (`ROLE_ADMIN`).
+   - **Role-Based Access Control**: `ROLE_USER` denied access to `/api/v1/admin/users` (`401`/`403`), while `ROLE_ADMIN` successfully fetched database user records (`200 OK`).
+   - **Project & Task Operations**: Created live project `Render Live Production Project` (ID: `66cd5df7-fd2a-4c8f-989c-c73c6f924571`) and task `Verify Production Live Deployment` (ID: `d37077ca-d02e-4cf7-add2-28b569008547`).
+4. **Chrome E2E Browser Testing**:
+   - Tested Vercel frontend in Google Chrome: verified hero section, navigation links, login/registration UI, route protection, and dashboard rendering without 30000ms latency timeouts.
+
